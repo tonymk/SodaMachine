@@ -8,6 +8,7 @@ namespace SodaMachineApplication
     {
         private int Money;
         private List<Soda> Inventory = new List<Soda>();
+
         private void Prompt() {
             Console.WriteLine("\n\nAvailable commands:");
             Console.WriteLine("insert (money) - Money put into money slot");
@@ -19,7 +20,7 @@ namespace SodaMachineApplication
             Console.WriteLine("-------\n\n");
         }
 
-        private void Order(string input) {
+        public void Order(string input) {
             try
             {
                 var sodaType = input.Split(' ')[1];
@@ -30,12 +31,16 @@ namespace SodaMachineApplication
 
                 Money = res.credit;
 
+                if(soda.Nr == 0) {
+                    Inventory.Remove(soda);
+                }
+
             }
             catch(IndexOutOfRangeException)
             {
                 Console.WriteLine("Missing argument after order");
             }
-            
+
         }
 
         public IEnumerable<string> TypesInInventory() {
@@ -46,18 +51,19 @@ namespace SodaMachineApplication
             Inventory.AddRange(fill);
         }
 
-        public Soda GetSoda(string soda) {
-            switch(soda) {
-                case "coke":
-                    return Inventory[0];
-                case "fanta":
-                    return Inventory[1];
-                case "sprite":
-                    return Inventory[2];
-                default:
-                    Console.WriteLine("No such soda");
-                    return null;
+        public Soda GetSoda(string sodaName) {
+
+            var soda =  Inventory.FirstOrDefault(s => {
+                return s.Name == sodaName && s.Nr > 0;
+            });
+
+            if(soda == null) {
+
+                Console.WriteLine($"No {sodaName} left");
             }
+
+            return soda;
+
         }
 
         public string InsertCredit(string input) {
@@ -107,9 +113,9 @@ namespace SodaMachineApplication
         public void Start()
         {
             var fill = new List<Soda> {
-                new Coke { Nr = 5 },
-                new Fanta {  Nr = 3 },
-                new Sprite { Nr = 3 },
+                new Coke { Nr = 2 },
+                new Fanta {  Nr = 1 },
+                new Sprite { Nr = 1 },
             };
 
             fillMachine(fill);

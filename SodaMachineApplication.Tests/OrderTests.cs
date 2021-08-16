@@ -1,9 +1,32 @@
+using System.Collections.Generic;
 using Xunit;
+using System.Linq;
 
 namespace SodaMachineApplication.Tests
 {
     public class OrderTests
     {
+        [Fact]
+        public void TestOrderWithSodaMachine()
+        {
+            var machine = new SodaMachine();
+
+            var fill = new List<Soda> {
+                new Coke { Nr = 1 },
+                new Fanta {  Nr = 2 },
+                new Sprite { Nr = 2 },
+            };
+
+            machine.fillMachine(fill);
+
+            machine.InsertCredit("insert 20");
+
+            machine.Order("order coke");
+
+            Assert.Equal(2, machine.TypesInInventory().Count());
+
+        }
+
         [Fact]
         public void TestOrderWithSuccess()
         {
@@ -14,6 +37,7 @@ namespace SodaMachineApplication.Tests
 
             Assert.Equal(0, res.credit);
 
+            Assert.Equal("Giving coke out \n\nGiving 0 out in change", res.output);
         }
 
         [Fact]

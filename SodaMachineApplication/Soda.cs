@@ -19,7 +19,7 @@ namespace SodaMachineApplication
             if (money >= Price && Nr > 0)
             {
                 output = $"Giving {Name} out \n\n";
-                output += $"Giving {money-Price} + out in change \n\n";
+                output += $"Giving {money-Price} out in change";
                 money = 0;
                 Nr--;
             }
