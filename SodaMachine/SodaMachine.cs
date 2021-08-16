@@ -5,15 +5,22 @@ namespace SodaMachine
     partial class Program
     {
         public class SodaMachine
-    {
-        private static int money;
+        {
+
+
+
+        private int money;
 
         /// <summary>
         /// This is the starter method for the machine
         /// </summary>
         public void Start()
         {
-            var inventory = new[] { new Soda { Name = "coke", Nr = 5 }, new Soda { Name = "sprite", Nr = 3 }, new Soda { Name = "fanta", Nr = 3 } };
+            var inventory = new Soda[] {
+                new Coke { Nr = 5 },
+                new Sprite { Nr = 3 },
+                new Fanta {  Nr = 3 },
+            };
 
             while (true)
             {
