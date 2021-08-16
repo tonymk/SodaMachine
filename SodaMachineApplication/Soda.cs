@@ -19,8 +19,7 @@ namespace SodaMachineApplication
             if (money >= Price && Nr > 0)
             {
                 output = $"Giving {Name} out \n\n";
-                money -= 20;
-                output += $"Giving {money} + out in change \n\n";
+                output += $"Giving {money-Price} + out in change \n\n";
                 money = 0;
                 Nr--;
             }
@@ -32,8 +31,23 @@ namespace SodaMachineApplication
             {
                 output = $"Need {(Price - money)} more";
             }
-
+            Console.WriteLine(output);
             return (output, money);
+        }
+
+        public string SmsOrder() {
+            string output;
+            if (Nr > 0)
+            {
+                output = $"Giving {Name} out";
+                Nr--;
+            }
+            else {
+                output = $"No {Name} left";
+            }
+
+            Console.WriteLine(output);
+            return output;
         }
     }
 
