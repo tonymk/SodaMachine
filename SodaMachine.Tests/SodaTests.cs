@@ -9,6 +9,8 @@ namespace SodaMachine.Tests
         public void Test1()
         {
 
+            Assert.Equal(true, true);
+
         }
     }
 }
