@@ -20,13 +20,22 @@ namespace SodaMachineApplication
         }
 
         private void Order(string input) {
-            var sodaType = input.Split(' ')[1];
-            var soda = GetSoda(sodaType);
-            if(soda == null) return;
+            try
+            {
+                var sodaType = input.Split(' ')[1];
+                var soda = GetSoda(sodaType);
+                if (soda == null) return;
 
-            var res  = soda.Order(Money);
+                var res = soda.Order(Money);
 
-            Money = res.credit;
+                Money = res.credit;
+
+            }
+            catch(IndexOutOfRangeException)
+            {
+                Console.WriteLine("Missing argument after order");
+            }
+            
         }
 
         public IEnumerable<string> TypesInInventory() {
@@ -76,8 +85,8 @@ namespace SodaMachineApplication
         public void SmsOrder(string input) {
             try
             {
-                var csoda = input.Split(' ')[2];
-                var soda = GetSoda(csoda);
+                var sodaType = input.Split(' ')[2];
+                var soda = GetSoda(sodaType);
                 if (soda == null) return;
                 soda.SmsOrder();
 
