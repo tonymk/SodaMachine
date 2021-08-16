@@ -2,28 +2,34 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SodaMachine
+namespace SodaMachineApplication
 {
-    partial class Program
+    public class SodaMachine
     {
-        public class SodaMachine
-        {
 
         private int money;
-        private Soda[] inventory;
+        private List<Soda> inventory = new List<Soda>();
 
-        public void Order(string input) {
-            var csoda = input.Split(' ')[1];
-            var soda = GetSoda(csoda);
-            var res  = soda?.Order(money);
-            money = res?.credit ?? money;
+        private void Order(string input) {
+            var sodaType = input.Split(' ')[1];
+            var soda = GetSoda(sodaType);
+            if(soda == null) return;
+
+            var res  = soda.Order(money);
+
+            money = res.credit;
+            Console.WriteLine(res.output);
         }
 
         private IEnumerable<string> TypesInInventory() {
             return inventory.Select(s => s.Name);
         }
 
-        public void Prompt() {
+        public void fillMachine(List<Soda> fill) {
+            inventory = inventory.AddRange(fill);
+        }
+
+        private void Prompt() {
             Console.WriteLine("\n\nAvailable commands:");
             Console.WriteLine("insert (money) - Money put into money slot");
             Console.WriteLine($"order ({string.Join(", ", TypesInInventory())}) - Order from machines buttons");
@@ -34,7 +40,14 @@ namespace SodaMachine
             Console.WriteLine("-------\n\n");
         }
 
-        private Soda GetSoda(string soda) {
+        private void InsertCredit(string input) {
+            //Add to credit
+            var added = input.Split(' ')[1];
+            money += int.Parse(added);
+            Console.WriteLine($"Adding {added} to credit");
+        }
+
+        public Soda GetSoda(string soda) {
             switch(soda) {
                 case "coke":
                     return inventory[0];
@@ -48,16 +61,21 @@ namespace SodaMachine
             }
         }
 
+
+
         /// <summary>
         /// This is the starter method for the machine
         /// </summary>
         public void Start()
         {
-            inventory = new Soda[] {
+
+            var fill = new List<Soda> {
                 new Coke { Nr = 5 },
-                new Sprite { Nr = 3 },
                 new Fanta {  Nr = 3 },
+                new Sprite { Nr = 3 },
             };
+
+            fillMachine(fill);
 
             while (true)
             {
@@ -67,9 +85,7 @@ namespace SodaMachine
 
                 if (input.StartsWith("insert"))
                 {
-                    //Add to credit
-                    money += int.Parse(input.Split(' ')[1]);
-                    Console.WriteLine("Adding " + int.Parse(input.Split(' ')[1]) + " to credit");
+                    InsertCredit();
                 }
                 if (input.StartsWith("order"))
                 {
@@ -116,5 +132,5 @@ namespace SodaMachine
             }
         }
     }
-    }
+
 }

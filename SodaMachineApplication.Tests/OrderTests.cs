@@ -1,10 +1,8 @@
-using System;
 using Xunit;
-using System.Linq;
 
-namespace SodaMachine.Tests
+namespace SodaMachineApplication.Tests
 {
-    public class UnitTest1
+    public class OrderTests
     {
         [Fact]
         public void TestOrderWithSuccess()
@@ -12,7 +10,7 @@ namespace SodaMachine.Tests
             var coke = new Coke {
                 Nr = 1
             };
-            var res = coke.Order(100);
+            var res = coke.Order(20);
 
             Assert.Equal(0, res.credit);
 
@@ -27,7 +25,7 @@ namespace SodaMachine.Tests
 
             var res = fanta.Order(100);
 
-            Assert.Equal("No fanta left", res.output.First());
+            Assert.Equal("No fanta left", res.output);
         }
 
         [Fact]
@@ -38,9 +36,9 @@ namespace SodaMachine.Tests
                 Nr = 1
             };
 
-            var res = sprite.Order(10);
+            var res = sprite.Order(14);
 
-            Assert.Equal("Need 5 more", res.output.First());
+            Assert.Equal("Need 1 more", res.output);
         }
 
         [Fact]
@@ -56,7 +54,7 @@ namespace SodaMachine.Tests
 
             res = coke.Order(100);
 
-            Assert.Equal("No coke left", res.output.First());
+            Assert.Equal("No coke left", res.output);
         }
 
 

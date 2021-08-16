@@ -1,6 +1,6 @@
-﻿namespace SodaMachine
+﻿namespace SodaMachineApplication
 {
-    partial class Program
+    class Program
     {
         static void Main(string[] args)
         {

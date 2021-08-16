@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 
 
-namespace SodaMachine
+namespace SodaMachineApplication
 {
 
     public abstract class Soda
@@ -12,25 +12,25 @@ namespace SodaMachine
         public int Nr { get; set; }
         public int Price {get;set;}
 
-        public (IEnumerable<string> output, int credit) Order(int money) {
+        public (string output, int credit) Order(int money) {
 
-            List<string> output = new List<string>();
+            string output;
 
             if (money >= Price && Nr > 0)
             {
-                output.Add($"Giving {Name} out");
+                output = $"Giving {Name} out \n\n";
                 money -= 20;
-                output.Add($"Giving {money} + out in change");
+                output += $"Giving {money} + out in change \n\n";
                 money = 0;
                 Nr--;
             }
             else if (Nr == 0)
             {
-                output.Add($"No {Name} left");
+                output = $"No {Name} left";
             }
             else
             {
-                output.Add($"Need {(Price - money)} more");
+                output = $"Need {(Price - money)} more";
             }
 
             return (output, money);
