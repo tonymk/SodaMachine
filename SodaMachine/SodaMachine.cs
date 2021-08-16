@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SodaMachine
 {
@@ -7,16 +9,51 @@ namespace SodaMachine
         public class SodaMachine
         {
 
-
-
         private int money;
+        private Soda[] inventory;
+
+        public void Order(string input) {
+            var csoda = input.Split(' ')[1];
+            var soda = GetSoda(csoda);
+            var res  = soda?.Order(money);
+            money = res?.credit ?? money;
+        }
+
+        private IEnumerable<string> TypesInInventory() {
+            return inventory.Select(s => s.Name);
+        }
+
+        public void Prompt() {
+            Console.WriteLine("\n\nAvailable commands:");
+            Console.WriteLine("insert (money) - Money put into money slot");
+            Console.WriteLine($"order ({string.Join(", ", TypesInInventory())}) - Order from machines buttons");
+            Console.WriteLine($"sms order ({string.Join(", ", TypesInInventory())}) - Order sent by sms");
+            Console.WriteLine("recall - gives money back");
+            Console.WriteLine("-------");
+            Console.WriteLine($"Inserted money: {money}");
+            Console.WriteLine("-------\n\n");
+        }
+
+        private Soda GetSoda(string soda) {
+            switch(soda) {
+                case "coke":
+                    return inventory[0];
+                case "fanta":
+                    return inventory[1];
+                case "sprite":
+                    return inventory[2];
+                default:
+                    Console.WriteLine("No such soda");
+                    return null;
+            }
+        }
 
         /// <summary>
         /// This is the starter method for the machine
         /// </summary>
         public void Start()
         {
-            var inventory = new Soda[] {
+            inventory = new Soda[] {
                 new Coke { Nr = 5 },
                 new Sprite { Nr = 3 },
                 new Fanta {  Nr = 3 },
@@ -24,14 +61,7 @@ namespace SodaMachine
 
             while (true)
             {
-                Console.WriteLine("\n\nAvailable commands:");
-                Console.WriteLine("insert (money) - Money put into money slot");
-                Console.WriteLine("order (coke, sprite, fanta) - Order from machines buttons");
-                Console.WriteLine("sms order (coke, sprite, fanta) - Order sent by sms");
-                Console.WriteLine("recall - gives money back");
-                Console.WriteLine("-------");
-                Console.WriteLine("Inserted money: " + money);
-                Console.WriteLine("-------\n\n");
+                Prompt();
 
                 var input = Console.ReadLine();
 
@@ -43,74 +73,7 @@ namespace SodaMachine
                 }
                 if (input.StartsWith("order"))
                 {
-                    // split string on space
-                    var csoda = input.Split(' ')[1];
-                    //Find out witch kind
-                    switch (csoda)
-                    {
-                        case "coke":
-                            var coke = inventory[0];
-                            if (coke.Name == csoda && money > 19 && coke.Nr > 0)
-                            {
-                                Console.WriteLine("Giving coke out");
-                                money -= 20;
-                                Console.WriteLine("Giving " + money + " out in change");
-                                money = 0;
-                                coke.Nr--;
-                            }
-                            else if (coke.Name == csoda && coke.Nr == 0)
-                            {
-                                Console.WriteLine("No coke left");
-                            }
-                            else if (coke.Name == csoda)
-                            {
-                                Console.WriteLine("Need " + (20 - money) + " more");
-                            }
-
-                            break;
-                        case "fanta":
-                            var fanta = inventory[2];
-                            if (fanta.Name == csoda && money > 14 && fanta.Nr >= 0)
-                            {
-                                Console.WriteLine("Giving fanta out");
-                                money -= 15;
-                                Console.WriteLine("Giving " + money + " out in change");
-                                money = 0;
-                                fanta.Nr--;
-                            }
-                            else if (fanta.Name == csoda && fanta.Nr == 0)
-                            {
-                                Console.WriteLine("No fanta left");
-                            }
-                            else if (fanta.Name == csoda)
-                            {
-                                Console.WriteLine("Need " + (15 - money) + " more");
-                            }
-
-                            break;
-                        case "sprite":
-                            var sprite = inventory[1];
-                            if (sprite.Name == csoda && money > 14 && sprite.Nr > 0)
-                            {
-                                Console.WriteLine("Giving sprite out");
-                                money -= 15;
-                                Console.WriteLine("Giving " + money + " out in change");
-                                money = 0;
-                                sprite.Nr--;
-                            }
-                            else if (sprite.Name == csoda && sprite.Nr == 0)
-                            {
-                                Console.WriteLine("No sprite left");
-                            }
-                            else if (sprite.Name == csoda)
-                            {
-                                Console.WriteLine("Need " + (15 - money) + " more");
-                            }
-                            break;
-                        default:
-                            Console.WriteLine("No such soda");
-                            break;
-                    }
+                    Order(input);
                 }
                 if (input.StartsWith("sms order"))
                 {
